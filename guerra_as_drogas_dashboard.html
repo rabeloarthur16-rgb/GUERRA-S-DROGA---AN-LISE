@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guerra às Drogas — Análise Comparada</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--bg:#07111f;--panel:#0d1b2a;--panel2:#11253a;--text:#edf4fb;--muted:#9db0c3;--line:#22384d;--accent:#62b6ff;--warn:#ffbf69}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#06101c,#0a1726);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:42px 7%;border-bottom:1px solid var(--line);background:radial-gradient(circle at 80% 10%,#123a5c,transparent 38%)}
+h1{font-size:clamp(32px,5vw,58px);margin:0 0 10px}h2{margin-top:0}.sub{color:var(--muted);max-width:850px;font-size:17px;line-height:1.6}
+nav{position:sticky;top:0;z-index:3;background:#081522ee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:10px 7%;display:flex;gap:10px;overflow:auto}
+nav a{color:var(--muted);text-decoration:none;padding:9px 12px;border-radius:9px;white-space:nowrap}nav a:hover{background:var(--panel2);color:white}
+main{max-width:1250px;margin:auto;padding:30px 7%}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}.card{background:linear-gradient(145deg,var(--panel),#0b1826);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 10px 30px #0002}.big{font-size:32px;font-weight:750}.muted{color:var(--muted)}section{margin:34px 0}
+.country{cursor:pointer;transition:.2s}.country:hover{transform:translateY(-2px);border-color:#3d6689}.tag{display:inline-block;border:1px solid #34526d;border-radius:999px;padding:4px 8px;margin:3px;font-size:12px;color:#b9d8ef}
+.chartbox{height:410px}.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.node{padding:12px 15px;border:1px solid #365675;background:#10263a;border-radius:12px}.arrow{color:var(--accent);font-size:22px}
+table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left}th{color:#bcd0e2} .tablewrap{overflow:auto}
+button{border:1px solid #3d6689;background:#10283d;color:white;padding:10px 14px;border-radius:10px;cursor:pointer}button:hover{background:#173650}
+details{border:1px solid var(--line);border-radius:12px;padding:14px;margin:9px 0;background:#0b1a29}summary{cursor:pointer;font-weight:650}
+footer{padding:30px 7%;color:var(--muted);border-top:1px solid var(--line);font-size:13px}
+#modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:20px;z-index:5}.modal{max-width:700px;width:100%;background:#0c1c2b;border:1px solid #34526d;border-radius:18px;padding:24px}
+</style>
+</head>
+<body>
+<header>
+<h1>Guerra às Drogas</h1>
+<div class="sub">Painel comparativo sobre proibição, repressão, mercados ilícitos, organizações criminosas e violência. Explore os dados, as leis e os possíveis mecanismos — separando correlação, hipótese e evidência causal.</div>
+</header>
+<nav>
+<a href="#painel">Painel</a><a href="#comparador">Comparador</a><a href="#relacoes">Relações</a><a href="#leis">Leis</a><a href="#casos">Casos</a><a href="#evidencia">Evidência</a>
+</nav>
+<main>
+<section id="painel">
+<h2>Painel comparativo</h2>
+<div class="grid" id="cards"></div>
+</section>
+
+<section id="comparador">
+<h2>Índice exploratório</h2>
+<div class="card"><p class="muted">Índice de violência: normalização da taxa de homicídios usada na análise anterior, com o maior valor da amostra = 100. Índice de repressão é uma codificação exploratória, não uma estatística oficial.</p>
+<div class="chartbox"><canvas id="scatter"></canvas></div></div>
+</section>
+
+<section id="relacoes">
+<h2>Mapa dos mecanismos</h2>
+<div class="card">
+<div class="flow">
+<span class="node">Proibição</span><span class="arrow">→</span><span class="node">Mercado clandestino</span><span class="arrow">→</span><span class="node">Lucro / risco</span><span class="arrow">→</span><span class="node">Organizações criminosas</span><span class="arrow">→</span><span class="node">Disputa</span><span class="arrow">→</span><span class="node">Violência</span>
+</div>
+<hr style="border-color:#22384d;margin:24px 0">
+<div class="flow">
+<span class="node">Repressão</span><span class="arrow">→</span><span class="node">Prisão/morte de liderança</span><span class="arrow">→</span><span class="node">Fragmentação</span><span class="arrow">→</span><span class="node">Novas disputas</span><span class="arrow">→</span><span class="node">Possível aumento da violência</span>
+</div>
+<p class="muted">O segundo mecanismo é uma hipótese causal estudada em diferentes contextos; não significa que toda operação repressiva produza aumento de homicídios.</p>
+</div>
+</section>
+
+<section id="leis">
+<h2>Leis e políticas comparadas</h2>
+<div id="laws"></div>
+</section>
+
+<section id="casos">
+<h2>Estudos de caso</h2>
+<div class="grid">
+<div class="card"><h3>🇲🇽 México</h3><p>Militarização, captura de lideranças e fragmentação de organizações são variáveis importantes para investigar a dinâmica da violência.</p><button onclick="showCase('México')">Abrir análise</button></div>
+<div class="card"><h3>🇨🇴 Colômbia</h3><p>Combinação histórica de repressão, erradicação, confisco e políticas alternativas permite estudar mudanças de longo prazo.</p><button onclick="showCase('Colômbia')">Abrir análise</button></div>
+<div class="card"><h3>🇧🇷 Brasil</h3><p>Tráfico criminalizado e usuário submetido a regime jurídico distinto; o STF modificou o tratamento do porte de cannabis para uso pessoal em 2024.</p><button onclick="showCase('Brasil')">Abrir análise</button></div>
+</div>
+</section>
+
+<section id="evidencia">
+<h2>O que os dados permitem dizer?</h2>
+<details open><summary>🟢 Relação bem documentada</summary><p>Mercados de drogas podem apresentar violência elevada quando múltiplas organizações competem por território, rotas ou mercados.</p></details>
+<details><summary>🟡 Relação dependente do contexto</summary><p>Operações de repressão podem desorganizar mercados e, em determinadas circunstâncias, intensificar competição e violência. O efeito não é uniforme.</p></details>
+<details><summary>🔴 Conclusão que o gráfico não demonstra</summary><p>“Quanto maior a repressão, maior a violência” não pode ser inferido deste pequeno conjunto de países. A amostra é pequena e há muitos fatores de confusão.</p></details>
+</section>
+</main>
+<footer>Projeto demonstrativo. Os índices e relações visuais são exploratórios. Para uso acadêmico, substitua os valores resumidos por séries oficiais e documente metodologia, período e fonte de cada variável.</footer>
+<div id="modal"><div class="modal"><button style="float:right" onclick="closeModal()">Fechar</button><div id="modalText"></div></div></div>
+<script>
+const countries=[
+{name:"Equador",flag:"🇪🇨",viol:100,rep:9,homic:51},
+{name:"Haiti",flag:"🇭🇹",viol:97.5,rep:7,homic:49.7},
+{name:"Colômbia",flag:"🇨🇴",viol:55.5,rep:8,homic:28.3},
+{name:"Honduras",flag:"🇭🇳",viol:51.2,rep:9,homic:21.2},
+{name:"México",flag:"🇲🇽",viol:34.3,rep:9,homic:17.5},
+{name:"Guatemala",flag:"🇬🇹",viol:33.9,rep:9,homic:17.3},
+{name:"Brasil",flag:"🇧🇷",viol:31.4,rep:7,homic:16}
+];
+const laws={
+"Brasil":["Lei 11.343/2006","Tráfico: 5–15 anos","Usuário possui regime jurídico diferenciado","STF: mudanças no tratamento do porte de cannabis para uso pessoal em 2024"],
+"México":["Código Penal Federal + Ley General de Salud","Diversas condutas relativas a narcóticos são criminalizadas","Estratégia antidrogas com forte emprego das Forças Armadas desde 2006","Combate a cartéis, apreensões e confisco"],
+"Colômbia":["Código Penal — art. 376","Tráfico, fabricação e porte criminalizados","Histórico de erradicação, operações e confisco","Também houve políticas de desenvolvimento alternativo"],
+"Honduras":["Decreto 126-89","Tráfico e outras condutas relacionadas criminalizados","Emprego de polícia e Forças Armadas em diferentes períodos","Medidas contra organizações criminosas"],
+"Guatemala":["Ley Contra la Narcoactividad — Decreto 48-92","Produção, posse, tráfico e comércio criminalizados","Prisão, apreensão e confisco","Combate a organizações criminosas"],
+"Equador":["Código Orgánico Integral Penal","Tráfico e condutas relacionadas criminalizados","Ações policiais e militares contra organizações criminosas","Período recente marcado por forte militarização"],
+"Haiti":["Legislação antidrogas nacional","Produção, tráfico, transporte, posse e comércio proibidos","Violência também envolve grupos armados, disputa territorial e fragilidade estatal","Não é possível atribuir a violência apenas à política de drogas"]
+};
+document.getElementById("cards").innerHTML=countries.map(c=>`<div class="card country" onclick="showCase('${c.name}')"><div style="font-size:25px">${c.flag} ${c.name}</div><p class="muted">Homicídios: ${c.homic}/100 mil (valor usado na análise)</p><span class="tag">Violência ${c.viol}</span><span class="tag">Repressão ${c.rep}/10</span></div>`).join("");
+document.getElementById("laws").innerHTML=Object.entries(laws).map(([k,v])=>`<details><summary>${k}</summary>${v.map(x=>`<p>• ${x}</p>`).join("")}</details>`).join("");
+new Chart(document.getElementById("scatter"),{type:"scatter",data:{datasets:[{label:"Países",data:countries.map(c=>({x:c.rep,y:c.viol,label:c.name}))}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#edf4fb"}},tooltip:{callbacks:{label:(ctx)=>{let c=countries[ctx.dataIndex];return `${c.name}: repressão ${c.rep}/10 · violência ${c.viol}`}}}},scales:{x:{title:{display:true,text:"Índice exploratório de repressão",color:"#edf4fb"},ticks:{color:"#9db0c3"},grid:{color:"#22384d"}},y:{title:{display:true,text:"Índice de violência",color:"#edf4fb"},ticks:{color:"#9db0c3"},grid:{color:"#22384d"}}}}});
+function showCase(n){let c=countries.find(x=>x.name===n);document.getElementById("modalText").innerHTML=`<h2>${c.flag} ${n}</h2><p><b>Índice de violência:</b> ${c.viol}</p><p><b>Índice exploratório de repressão:</b> ${c.rep}/10</p><p><b>Taxa usada:</b> ${c.homic}/100 mil</p><p>Esses números não estabelecem causalidade. Para uma análise científica, é necessário usar séries temporais, variáveis de controle e fontes primárias.</p>`;document.getElementById("modal").style.display="flex"}
+function closeModal(){document.getElementById("modal").style.display="none"}
+</script>
+</body></html>
